@@ -1,0 +1,89 @@
+{
+  "name": "@hyperse/html-webpack-plugin-loader",
+  "version": "1.0.0",
+  "description": "A custom template loader that parses HTML templates for the `html-webpack-plugin` package",
+  "keywords": [
+    "hyperse",
+    "typescript",
+    "webpack",
+    "rspack",
+    "html-webpack-plugin",
+    "html-loader"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:hyperse-io/html-webpack-plugin-loader.git"
+  },
+  "type": "module",
+  "exports": {
+    "./loader": {
+      "import": "./dist/loader/loader.js"
+    },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./bin/",
+    "./dist/",
+    "./index.js"
+  ],
+  "scripts": {
+    "build": "node --import @hyperse/ts-node/register ./scripts/build.ts",
+    "next": "next build",
+    "lint": "eslint .",
+    "lint-fix": "yarn lint --fix",
+    "test": "run-s test-unit",
+    "test-unit": "vitest run",
+    "test-task": "vitest run",
+    "typecheck": "tsc --project ./tsconfig.json --noEmit",
+    "lint-staged-files": "lint-staged --allow-empty",
+    "changeset": "changeset",
+    "release": "yarn build && changeset publish",
+    "cz": "cz",
+    "prepare": "husky"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "loader-utils": "^3.3.1",
+    "parse5": "^7.3.0"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.4",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@hyperse/eslint-config-hyperse": "^1.4.5",
+    "@hyperse/ts-node": "^1.0.3",
+    "@types/loader-runner": "^2.2.8",
+    "@types/loader-utils": "^2.0.6",
+    "@types/node": "^24.0.1",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.28.0",
+    "execa": "^9.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
+    "loader-runner": "^4.3.0",
+    "npm-run-all": "^4.1.5",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3",
+    "webpack": "^5.99.9"
+  },
+  "packageManager": "yarn@4.9.2",
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
