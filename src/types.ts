@@ -1,17 +1,41 @@
-export type ScriptItem = {
+/**
+ * The position of the script
+ */
+export type Position = 'beginning' | 'end';
+
+/**
+ * The base script item
+ */
+export type ScriptItemBase = {
   /**
-   * The src of the script
+   * The id of the script
    */
-  src: string;
+  id: string;
   /**
    * The position of the script, 'beginning' for beginning of head, 'end' for end of head
    * The position of the script, 'beginning' for beginning of body, 'end' for end of body
    */
-  position: 'beginning' | 'end';
+  position: Position;
   /**
    * The order of the script, smaller numbers are loaded first
    */
   order?: number;
+};
+/**
+ * The inline script item
+ */
+export type ScriptionInlineItem = ScriptItemBase & {
+  /**
+   * The content of the script
+   */
+  content: string;
+};
+
+export type ScriptItem = ScriptItemBase & {
+  /**
+   * The src of the script, the id
+   */
+  src: string;
   /**
    * The type of the script
    */
@@ -50,14 +74,7 @@ export interface TemplateOptions {
    * The favicon of the page
    */
   favicon?: string;
-  /**
-   * The viewport of the page
-   */
-  viewport?: string;
-  /**
-   * The head inline scripts
-   */
-  headInlineScripts?: string[];
+
   /**
    * The head html meta tags of the page
    */
@@ -74,4 +91,8 @@ export interface TemplateOptions {
    * The body scripts of the page
    */
   bodyScripts?: ScriptItem[];
+  /**
+   * The head inline scripts
+   */
+  headInlineScripts?: ScriptionInlineItem[];
 }

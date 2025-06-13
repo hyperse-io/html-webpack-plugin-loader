@@ -21,7 +21,7 @@ export const upsertScripts = (
       (node) =>
         node.nodeName === 'script' &&
         (node as DefaultTreeAdapterTypes.Element).attrs?.find(
-          (attr) => attr.name === 'src' && attr.value === script.src
+          (attr) => attr.name === 'id' && attr.value === script.id
         )
     );
 
@@ -32,8 +32,9 @@ export const upsertScripts = (
 
   // Create new script nodes
   const scriptTags = sortedScripts.map((script) => {
-    const scriptNode = parseFragment(`<script src="${script.src}"></script>`)
-      .childNodes[0] as DefaultTreeAdapterTypes.Element;
+    const scriptNode = parseFragment(
+      `<script id="${script.id}" src="${script.src}"></script>`
+    ).childNodes[0] as DefaultTreeAdapterTypes.Element;
 
     if (script.type) {
       scriptNode.attrs?.push({ name: 'type', value: script.type });

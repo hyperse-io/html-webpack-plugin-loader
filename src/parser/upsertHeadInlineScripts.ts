@@ -1,4 +1,5 @@
 import { type DefaultTreeAdapterTypes, parseFragment } from 'parse5';
+import type { ScriptionInlineItem } from '../types.js';
 
 /**
  * Upsert the inline scripts
@@ -7,17 +8,16 @@ import { type DefaultTreeAdapterTypes, parseFragment } from 'parse5';
  */
 export const upsertHeadInlineScripts = (
   head: DefaultTreeAdapterTypes.Element,
-  scripts: string[]
+  scripts: ScriptionInlineItem[]
 ) => {
   // Remove existing inline scripts with matching content
   scripts.forEach((script) => {
     const existingScriptIndex = head.childNodes.findIndex(
       (node) =>
         node.nodeName === 'script' &&
-        (
-          (node as DefaultTreeAdapterTypes.Element)
-            .childNodes?.[0] as DefaultTreeAdapterTypes.TextNode
-        )?.value === script
+        (node as DefaultTreeAdapterTypes.Element).attrs?.find(
+          (attr) => attr.name === 'id' && attr.value === script.id
+        )
     );
 
     if (existingScriptIndex > -1) {
@@ -26,10 +26,46 @@ export const upsertHeadInlineScripts = (
   });
 
   // Add new inline scripts
-  scripts.forEach((script) => {
-    const scriptNode = parseFragment(`<script>${script}</script>`)
-      .childNodes[0] as DefaultTreeAdapterTypes.Element;
+  // Sort scripts by order (smaller numbers first)
+  const sortedScripts = [...scripts].sort(
+    (a, b) => (a.order ?? 0) - (b.order ?? 0)
+  );
 
+  // Create script nodes
+  const scriptTags = sortedScripts.map((script) => {
+    const scriptNode = parseFragment(
+      `<script id="${script.id}">${script.content}</script>`
+    ).childNodes[0] as DefaultTreeAdapterTypes.Element;
+    return scriptNode;
+  });
+
+  // Split scripts by position
+  const beginningScripts = sortedScripts.reduce<
+    DefaultTreeAdapterTypes.Element[]
+  >((acc, script, index) => {
+    if (script.position === 'beginning') {
+      acc.push(scriptTags[index]);
+    }
+    return acc;
+  }, []);
+
+  const endScripts = sortedScripts.reduce<DefaultTreeAdapterTypes.Element[]>(
+    (acc, script, index) => {
+      if (script.position === 'end') {
+        acc.push(scriptTags[index]);
+      }
+      return acc;
+    },
+    []
+  );
+
+  // Add beginning scripts
+  beginningScripts.reverse().forEach((scriptNode) => {
+    head.childNodes.unshift(scriptNode);
+  });
+
+  // Add end scripts
+  endScripts.forEach((scriptNode) => {
     head.childNodes.push(scriptNode);
   });
 };

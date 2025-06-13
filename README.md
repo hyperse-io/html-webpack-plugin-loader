@@ -52,20 +52,66 @@ import { TemplateParser } from '@hyperse/html-webpack-plugin-loader';
 // Create a new parser instance
 const parser = new TemplateParser(htmlSource);
 
-// Chain methods to modify the template
+// Define template options
+const templateOptions: TemplateOptions = {
+  // Set page title
+  title: 'My Page Title',
+
+  // Set website favicon
+  favicon: '/favicon.ico',
+
+  // Set meta tags in head
+  headMetaTags: ['<meta name="description" content="My page description">'],
+
+  // Set styles in head
+  headStyles: ['<style>body { margin: 0; }</style>'],
+
+  // Set scripts in head
+  headScripts: [
+    {
+      id: 'main-js', // Required: Unique script identifier
+      src: '/main.js', // Required: Script source path
+      position: 'end', // Required: Script position in head
+      type: 'text/javascript', // Optional: Script type
+      async: true, // Optional: Load script asynchronously
+      defer: false, // Optional: Defer script loading
+      order: 1, // Optional: Loading order
+    },
+  ],
+
+  // Set inline scripts in head
+  headInlineScripts: [
+    {
+      id: 'inline-script', // Required: Unique script identifier
+      position: 'end', // Required: Script position in head
+      content: 'console.log("Hello");', // Required: Script content
+      order: 2, // Optional: Loading order
+    },
+  ],
+
+  // Set scripts in body
+  bodyScripts: [
+    {
+      id: 'app-js', // Required: Unique script identifier
+      src: '/app.js', // Required: Script source path
+      position: 'end', // Required: Script position in body
+      type: 'text/javascript', // Optional: Script type
+      async: true, // Optional: Load script asynchronously
+      defer: false, // Optional: Defer script loading
+      order: 1, // Optional: Loading order
+    },
+  ],
+};
+
+// Use template options to modify HTML
 const modifiedHtml = parser
-  .upsertTitleTag('My Page Title')
-  .upsertFaviconTag('/favicon.ico')
-  .upsertViewportTag(
-    '<meta name="viewport" content="width=device-width, initial-scale=1">'
-  )
-  .upsertHeadMetaTags([
-    '<meta name="description" content="My page description">',
-  ])
-  .upsertHeadStyles(['<style>body { margin: 0; }</style>'])
-  .upsertHeadScripts([{ src: '/main.js' }])
-  .upsertHeadInlineScripts(['<script>console.log("Hello");</script>'])
-  .upsertBodyScripts([{ src: '/app.js' }])
+  .upsertTitleTag(templateOptions.title)
+  .upsertFaviconTag(templateOptions.favicon)
+  .upsertHeadMetaTags(templateOptions.headMetaTags)
+  .upsertHeadStyles(templateOptions.headStyles)
+  .upsertHeadScripts(templateOptions.headScripts)
+  .upsertHeadInlineScripts(templateOptions.headInlineScripts)
+  .upsertBodyScripts(templateOptions.bodyScripts)
   .serialize();
 ```
 
@@ -73,7 +119,6 @@ const modifiedHtml = parser
 
 - `upsertTitleTag(title: string)`: Updates or inserts the page title
 - `upsertFaviconTag(favicon: string)`: Updates or inserts the favicon link
-- `upsertViewportTag(viewport: string)`: Updates or inserts the viewport meta tag
 - `upsertHeadMetaTags(tags: string[])`: Updates or inserts meta tags in the head
 - `upsertHeadStyles(styles: string[])`: Updates or inserts style tags in the head
 - `upsertHeadScripts(scripts: ScriptItem[])`: Updates or inserts script tags in the head

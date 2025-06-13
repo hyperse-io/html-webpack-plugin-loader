@@ -16,8 +16,8 @@ describe('upsertScripts', () => {
 
   it('should add scripts in correct order based on order property', () => {
     const scripts: ScriptItem[] = [
-      { src: 'script2.js', position: 'end', order: 2 },
-      { src: 'script1.js', position: 'end', order: 1 },
+      { id: 'script2', src: 'script2.js', position: 'end', order: 2 },
+      { id: 'script1', src: 'script1.js', position: 'end', order: 1 },
     ];
 
     upsertScripts(element, scripts);
@@ -38,8 +38,8 @@ describe('upsertScripts', () => {
 
   it('should add scripts at beginning and end correctly', () => {
     const scripts: ScriptItem[] = [
-      { src: 'end.js', position: 'end' },
-      { src: 'beginning.js', position: 'beginning' },
+      { id: 'end-script', src: 'end.js', position: 'end' },
+      { id: 'beginning-script', src: 'beginning.js', position: 'beginning' },
     ];
 
     upsertScripts(element, scripts);
@@ -57,11 +57,14 @@ describe('upsertScripts', () => {
   });
 
   it('should remove existing scripts with matching src', () => {
-    const existingScript = parseFragment('<script src="test.js"></script>')
-      .childNodes[0];
+    const existingScript = parseFragment(
+      '<script id="test-script" src="test.js"></script>'
+    ).childNodes[0];
     element.childNodes.push(existingScript as DefaultTreeAdapterTypes.Element);
 
-    const scripts: ScriptItem[] = [{ src: 'test.js', position: 'end' }];
+    const scripts: ScriptItem[] = [
+      { id: 'test-script', src: 'test.js', position: 'end' },
+    ];
 
     upsertScripts(element, scripts);
 
@@ -76,6 +79,7 @@ describe('upsertScripts', () => {
   it('should add all script attributes correctly', () => {
     const scripts: ScriptItem[] = [
       {
+        id: 'test-script',
         src: 'test.js',
         position: 'end',
         type: 'module',

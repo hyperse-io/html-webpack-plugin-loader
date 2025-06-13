@@ -21,10 +21,6 @@ export const parseTemplate = (
     parser.upsertFaviconTag(options.favicon);
   }
 
-  if (options.viewport) {
-    parser.upsertViewportTag(options.viewport);
-  }
-
   if (options.headMetaTags?.length) {
     parser.upsertHeadMetaTags(options.headMetaTags);
   }

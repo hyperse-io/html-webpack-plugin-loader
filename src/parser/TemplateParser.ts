@@ -1,6 +1,6 @@
 import type { DefaultTreeAdapterTypes } from 'parse5';
 import { serialize } from 'parse5';
-import type { ScriptItem } from '../types.js';
+import type { ScriptionInlineItem, ScriptItem } from '../types.js';
 import { parseDocument } from '../utils/parseDocument.js';
 import { upsertFavicon } from './upsertFavicon.js';
 import { upsertHeadInlineScripts } from './upsertHeadInlineScripts.js';
@@ -42,16 +42,6 @@ export class TemplateParser {
   }
 
   /**
-   * Upsert the viewport tag
-   * @param viewport - The viewport to upsert
-   * @returns The TemplateParser instance
-   */
-  public upsertViewportTag(viewport: string): TemplateParser {
-    upsertHeadInlineScripts(this.head, [viewport]);
-    return this;
-  }
-
-  /**
    * Upsert the head before html tags
    * @param tags - The tags to upsert
    * @returns The TemplateParser instance
@@ -86,7 +76,9 @@ export class TemplateParser {
    * @param scripts - The scripts to upsert
    * @returns The TemplateParser instance
    */
-  public upsertHeadInlineScripts(scripts: string[]): TemplateParser {
+  public upsertHeadInlineScripts(
+    scripts: ScriptionInlineItem[]
+  ): TemplateParser {
     upsertHeadInlineScripts(this.body, scripts);
     return this;
   }
