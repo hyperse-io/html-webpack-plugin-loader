@@ -865,7 +865,6 @@ __metadata:
     "@commitlint/config-conventional": "npm:^19.8.1"
     "@hyperse/eslint-config-hyperse": "npm:^1.4.5"
     "@hyperse/ts-node": "npm:^1.0.3"
-    "@types/loader-runner": "npm:^2.2.8"
     "@types/node": "npm:^24.0.1"
     commitizen: "npm:^4.3.1"
     cz-conventional-changelog: "npm:^3.3.0"
@@ -873,7 +872,6 @@ __metadata:
     html-webpack-plugin: "npm:^5.6.3"
     husky: "npm:^9.1.7"
     lint-staged: "npm:^16.1.0"
-    loader-runner: "npm:^4.3.0"
     npm-run-all: "npm:^4.1.5"
     parse5: "npm:^7.3.0"
     tsup: "npm:^8.5.0"
@@ -1634,15 +1632,6 @@ __metadata:
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 10/1a3c3e06236e4c4aab89499c428d585527ce50c24fe8259e8b3926d3df4cfbbbcf306cfc73ddfb66cbafc973116efd15967020b0f738f63e09e64c7d260519e7
-  languageName: node
-  linkType: hard
-
-"@types/loader-runner@npm:^2.2.8":
-  version: 2.2.8
-  resolution: "@types/loader-runner@npm:2.2.8"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10/3a7d070bc36926620e752afe5bd49bc79b9c501f04935dc78e8aa0532618a350c7a773d29d8bfe939f5aae2551c322cb0e8ef65486ac78e3c3715b2f436d5765
   languageName: node
   linkType: hard
 
@@ -5803,7 +5792,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-runner@npm:^4.2.0, loader-runner@npm:^4.3.0":
+"loader-runner@npm:^4.2.0":
   version: 4.3.0
   resolution: "loader-runner@npm:4.3.0"
   checksum: 10/555ae002869c1e8942a0efd29a99b50a0ce6c3296efea95caf48f00d7f6f7f659203ed6613688b6181aa81dc76de3e65ece43094c6dffef3127fe1a84d973cd3

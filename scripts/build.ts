@@ -13,7 +13,7 @@ async function buildAll() {
   const externals = ['webpack'];
   const entries: Record<string, Omit<Options, 'entry'> & { entry: string }> = {
     'src/index.ts': {
-      format: ['esm'],
+      format: ['esm', 'cjs'],
       entry: 'index',
       dts: true,
       clean: true,
@@ -35,7 +35,8 @@ async function buildAll() {
   };
 
   for (const [key, value] of Object.entries(entries)) {
-    const { format, entry, dts, clean, outExtension } = value;
+    const { format, entry, dts, clean, outExtension, external, noExternal } =
+      value;
     await build({
       splitting: false,
       treeshake: true,
@@ -46,6 +47,8 @@ async function buildAll() {
       dts,
       clean,
       outExtension,
+      external,
+      noExternal,
       format: format as Format[],
     });
   }

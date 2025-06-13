@@ -3,14 +3,7 @@ import { parseTemplate } from '../parser/parseTemplate.js';
 
 // Define the loader options type
 interface LoaderOptions {
-  title?: string;
-  favicon?: string;
-  headMetaTags?: string[];
-  headStyles?: string[];
-  headScripts?: string[];
-  headInlineScripts?: string[];
-  bodyScripts?: string[];
-  bodyInlineScripts?: string[];
+  force?: boolean;
 }
 
 export default function htmlLoader(
@@ -18,22 +11,43 @@ export default function htmlLoader(
   source: string
 ): string {
   // Get and validate options
-  const options = this.getOptions;
+  const options = this.getOptions();
+  const force = options.force || false;
+
+  const allLoadersButThisOne = this.loaders.filter(
+    (loader) => loader.normal !== module.exports
+  );
+
+  // This loader shouldn't kick in if there is any other loader (unless it's explicitly enforced)
+  if (allLoadersButThisOne.length > 0 && !force) {
+    return source;
+  }
+
+  // Allow only one html-webpack-plugin loader to allow loader options in the webpack config
+  const htmlWebpackPluginLoaders = this.loaders.filter(
+    (loader) => loader.normal === module.exports
+  );
+
+  const lastHtmlWebpackPluginLoader =
+    htmlWebpackPluginLoaders[htmlWebpackPluginLoaders.length - 1];
+  if (this.loaders[this.loaderIndex] !== lastHtmlWebpackPluginLoader) {
+    return source;
+  }
 
   // Skip .js files (unless it's explicitly enforced)
   if (!/\.html$/.test(this.resourcePath)) {
     return source;
   }
 
-  // Example transformation
-  const transformedSource = parseTemplate(source);
-
-  // You can use this.emitFile to emit additional files
-  // this.emitFile('output.txt', 'Some content');
-
-  // You can use this.callback for async operations
-  // this.callback(null, transformedSource, sourceMap, meta);
-
-  // Return the transformed source
-  return `export default ${JSON.stringify(transformedSource)}`;
+  // Convert the source into a string that can be executed by vm.Script
+  return [
+    'const { TemplateParser } = eval("require")(' +
+      JSON.stringify(require.resolve('../index.cjs')) +
+      ');',
+    'const parseTemplate = ' + parseTemplate.toString() + ';',
+    'const source = ' + JSON.stringify(source) + ';',
+    'module.exports = (function(templateParams) { ',
+    'return parseTemplate(source, templateParams || {});',
+    '});',
+  ].join('');
 }

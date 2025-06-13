@@ -1,26 +1,18 @@
-import { type RunLoaderOption, runLoaders } from 'loader-runner';
+import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import webpack from 'webpack';
+import type { Configuration } from 'webpack';
+import { webpack } from 'webpack';
 
 export const getDirname = (url: string, ...paths: string[]) => {
   return join(dirname(fileURLToPath(url)), ...paths);
 };
 
-export const testLoader = (options: RunLoaderOption) => {
-  return new Promise((resolve, reject) => {
-    runLoaders(options, (err, result) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(result);
-    });
-  });
-};
-
-export const testWebpackPlugin = (webpackConfig: webpack.Configuration) => {
-  return new Promise<webpack.Stats | undefined>((resolve, reject) => {
+export const testWebpackPlugin = (
+  webpackConfig: Configuration,
+  htmlDist: string
+) => {
+  return new Promise<string>((resolve, reject) => {
     webpack(
       {
         ...webpackConfig,
@@ -28,13 +20,15 @@ export const testWebpackPlugin = (webpackConfig: webpack.Configuration) => {
         optimization: {
           minimize: false,
         },
+        stats: 'verbose',
       },
-      (err, stats) => {
+      (err, _stats) => {
         if (err) {
           reject(err);
           return;
         }
-        resolve(stats);
+        const html = readFileSync(join(htmlDist, 'index.html'), 'utf-8');
+        resolve(html);
       }
     );
   });
