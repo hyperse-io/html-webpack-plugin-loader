@@ -28,7 +28,7 @@ async function buildAll() {
       external: externals,
       outExtension() {
         return {
-          js: `.js`,
+          js: `.cjs`,
         };
       },
     },

@@ -1,10 +1,16 @@
-import { getOptions } from 'loader-utils';
 import type { LoaderContext } from 'webpack';
+import { parseTemplate } from '../parser/parseTemplate.js';
 
 // Define the loader options type
 interface LoaderOptions {
-  transform?: boolean;
-  // Add more option types as needed
+  title?: string;
+  favicon?: string;
+  headMetaTags?: string[];
+  headStyles?: string[];
+  headScripts?: string[];
+  headInlineScripts?: string[];
+  bodyScripts?: string[];
+  bodyInlineScripts?: string[];
 }
 
 export default function htmlLoader(
@@ -12,19 +18,15 @@ export default function htmlLoader(
   source: string
 ): string {
   // Get and validate options
-  const options = getOptions(this) as LoaderOptions;
+  const options = this.getOptions;
 
-  // Get the resource path
+  // Skip .js files (unless it's explicitly enforced)
   if (!/\.html$/.test(this.resourcePath)) {
     return source;
   }
 
   // Example transformation
-  let transformedSource = source;
-  if (options.transform) {
-    // Add your transformation logic here
-    transformedSource = source.toUpperCase(); // Example transformation
-  }
+  const transformedSource = parseTemplate(source);
 
   // You can use this.emitFile to emit additional files
   // this.emitFile('output.txt', 'Some content');
@@ -33,5 +35,5 @@ export default function htmlLoader(
   // this.callback(null, transformedSource, sourceMap, meta);
 
   // Return the transformed source
-  return `module.exports.default = module.exports = ${JSON.stringify(transformedSource)}`;
+  return `export default ${JSON.stringify(transformedSource)}`;
 }

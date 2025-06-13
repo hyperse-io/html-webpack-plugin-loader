@@ -17,11 +17,10 @@
   "type": "module",
   "exports": {
     "./loader": {
-      "import": "./dist/loader/loader.js"
+      "import": "./dist/loader/htmlLoader.cjs"
     },
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
       "import": "./dist/index.js"
     },
     "./package.json": "./package.json"
@@ -53,7 +52,6 @@
     }
   },
   "dependencies": {
-    "loader-utils": "^3.3.1",
     "parse5": "^7.3.0"
   },
   "devDependencies": {
@@ -64,12 +62,11 @@
     "@hyperse/eslint-config-hyperse": "^1.4.5",
     "@hyperse/ts-node": "^1.0.3",
     "@types/loader-runner": "^2.2.8",
-    "@types/loader-utils": "^2.0.6",
     "@types/node": "^24.0.1",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.28.0",
-    "execa": "^9.6.0",
+    "html-webpack-plugin": "^5.6.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
     "loader-runner": "^4.3.0",
