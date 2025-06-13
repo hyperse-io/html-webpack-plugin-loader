@@ -18,7 +18,11 @@ export const parseTemplate = (
   }
 
   if (options.favicon) {
-    parser.upsertFaviconTag(options.favicon);
+    parser.upsertFaviconTag(
+      options.favicon.href,
+      options.favicon.rel,
+      options.favicon.attributes
+    );
   }
 
   if (options.headMetaTags?.length) {

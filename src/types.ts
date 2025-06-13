@@ -6,7 +6,7 @@ export type Position = 'beginning' | 'end';
 /**
  * The base script item
  */
-export type ScriptItemBase = {
+export type HtmlItemBase = {
   /**
    * The id of the script
    */
@@ -21,17 +21,35 @@ export type ScriptItemBase = {
    */
   order?: number;
 };
+
+export type StyleItem = HtmlItemBase & {
+  /**
+   * The href of the style
+   */
+  href: string;
+};
+
+/**
+ * The inline style item
+ */
+export type StyleInlineItem = HtmlItemBase & {
+  /**
+   * The content of the style
+   */
+  content: string;
+};
+
 /**
  * The inline script item
  */
-export type ScriptionInlineItem = ScriptItemBase & {
+export type ScriptionInlineItem = HtmlItemBase & {
   /**
    * The content of the script
    */
   content: string;
 };
 
-export type ScriptItem = ScriptItemBase & {
+export type ScriptItem = HtmlItemBase & {
   /**
    * The src of the script, the id
    */
@@ -63,6 +81,24 @@ export type ScriptItem = ScriptItemBase & {
 };
 
 /**
+ * The favicon item
+ */
+export type FaviconItem = {
+  /**
+   * The href of the favicon
+   */
+  href: string;
+  /**
+   * The rel attribute of the favicon tag
+   */
+  rel: string;
+  /**
+   * The attributes of the favicon tag
+   */
+  attributes: Record<string, string>;
+};
+
+/**
  * The options for the template
  */
 export interface TemplateOptions {
@@ -73,8 +109,7 @@ export interface TemplateOptions {
   /**
    * The favicon of the page
    */
-  favicon?: string;
-
+  favicon?: FaviconItem;
   /**
    * The head html meta tags of the page
    */
@@ -82,7 +117,7 @@ export interface TemplateOptions {
   /**
    * The head styles of the page
    */
-  headStyles?: string[];
+  headStyles?: StyleItem[];
   /**
    * The head scripts of the page
    */
@@ -95,4 +130,8 @@ export interface TemplateOptions {
    * The head inline scripts
    */
   headInlineScripts?: ScriptionInlineItem[];
+  /**
+   * The head inline styles
+   */
+  headInlineStyles?: StyleInlineItem[];
 }

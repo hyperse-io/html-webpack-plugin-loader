@@ -1,9 +1,15 @@
 import type { DefaultTreeAdapterTypes } from 'parse5';
 import { serialize } from 'parse5';
-import type { ScriptionInlineItem, ScriptItem } from '../types.js';
+import type {
+  ScriptionInlineItem,
+  ScriptItem,
+  StyleInlineItem,
+  StyleItem,
+} from '../types.js';
 import { parseDocument } from '../utils/parseDocument.js';
 import { upsertFavicon } from './upsertFavicon.js';
 import { upsertHeadInlineScripts } from './upsertHeadInlineScripts.js';
+import { upsertHeadInlineStyles } from './upsertHeadInlineStyles.js';
 import { upsertHeadMetaTags } from './upsertHeadMetaTags.js';
 import { upsertHeadStyles } from './upsertHeadStyles.js';
 import { upsertScripts } from './upsertScripts.js';
@@ -33,11 +39,17 @@ export class TemplateParser {
 
   /**
    * Upsert the favicon tag
-   * @param favicon - The favicon to upsert
+   * @param href - The favicon to upsert
+   * @param rel - The rel attribute of the favicon tag
+   * @param attributes - The attributes of the favicon tag
    * @returns The TemplateParser instance
    */
-  public upsertFaviconTag(favicon: string): TemplateParser {
-    upsertFavicon(this.head, favicon);
+  public upsertFaviconTag(
+    href: string,
+    rel: string = 'icon',
+    attributes: Record<string, string> = {}
+  ): TemplateParser {
+    upsertFavicon(this.head, href, rel, attributes);
     return this;
   }
 
@@ -56,8 +68,18 @@ export class TemplateParser {
    * @param styles - The styles to upsert
    * @returns The TemplateParser instance
    */
-  public upsertHeadStyles(styles: string[]): TemplateParser {
+  public upsertHeadStyles(styles: StyleItem[]): TemplateParser {
     upsertHeadStyles(this.head, styles);
+    return this;
+  }
+
+  /**
+   * Upsert the head inline styles
+   * @param styles - The styles to upsert
+   * @returns The TemplateParser instance
+   */
+  public upsertHeadInlineStyles(styles: StyleInlineItem[]): TemplateParser {
+    upsertHeadInlineStyles(this.head, styles);
     return this;
   }
 

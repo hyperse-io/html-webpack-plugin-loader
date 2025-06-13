@@ -1,14 +1,14 @@
 import { type DefaultTreeAdapterTypes, parseFragment } from 'parse5';
-import type { StyleItem } from '../types.js';
+import type { StyleInlineItem } from '../types.js';
 
 /**
  * Upsert the head styles
  * @param head - The head element
  * @param styles - The styles to upsert (hrefs)
  */
-export const upsertHeadStyles = (
+export const upsertHeadInlineStyles = (
   head: DefaultTreeAdapterTypes.Element,
-  styles: StyleItem[]
+  styles: StyleInlineItem[]
 ) => {
   // Sort styles by order (smaller numbers first)
   const sortedStyles = [...styles].sort(
@@ -19,10 +19,7 @@ export const upsertHeadStyles = (
   sortedStyles.forEach((style) => {
     const existingStyleIndex = head.childNodes.findIndex(
       (node) =>
-        node.nodeName === 'link' &&
-        (node as DefaultTreeAdapterTypes.Element).attrs?.find(
-          (attr) => attr.name === 'rel' && attr.value === 'stylesheet'
-        ) &&
+        node.nodeName === 'style' &&
         (node as DefaultTreeAdapterTypes.Element).attrs?.find(
           (attr) => attr.name === 'id' && attr.value === style.id
         )
@@ -36,7 +33,7 @@ export const upsertHeadStyles = (
   // Create new style nodes
   const styleTags = sortedStyles.map((style) => {
     const styleNode = parseFragment(
-      `<link rel="stylesheet" href="${style.href}" id="${style.id}"></link>`
+      `<style id="${style.id}">${style.content}</style>`
     ).childNodes[0] as DefaultTreeAdapterTypes.Element;
 
     return styleNode;

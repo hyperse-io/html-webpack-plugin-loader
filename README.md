@@ -21,18 +21,19 @@ A TypeScript-based HTML template parser that provides a fluent API for manipulat
 
 ## Features
 
+## Features
+
 - 🔄 Fluent API for HTML manipulation
 - 🎯 Precise control over HTML document structure
 - 📦 Easy integration with webpack
 - 🚀 TypeScript support
 - 🔍 Built-in support for common HTML modifications:
 - 📝 Title tag management
-- 🎨 Favicon handling
-- 📱 Viewport meta tag control
-- 📋 Meta tags management
-- 💅 Style injection
-- 📜 Script injection (both inline and external)
-- 🔄 Head and body modifications
+- 🎨 Favicon handling with customizable attributes
+- 📱 Meta tags management
+- 💅 Style injection (both external and inline)
+- 📜 Script injection (both external and inline)
+- 🔄 Head and body modifications with position control
 
 ## Installation
 
@@ -57,48 +58,75 @@ const templateOptions: TemplateOptions = {
   // Set page title
   title: 'My Page Title',
 
-  // Set website favicon
-  favicon: '/favicon.ico',
+  // Set website favicon with custom attributes
+  favicon: {
+    href: '/favicon.ico',
+    rel: 'icon',
+    attributes: {
+      type: 'image/x-icon',
+      sizes: '32x32',
+    },
+  },
 
   // Set meta tags in head
   headMetaTags: ['<meta name="description" content="My page description">'],
 
-  // Set styles in head
-  headStyles: ['<style>body { margin: 0; }</style>'],
+  // Set external styles in head
+  headStyles: [
+    {
+      id: 'main-css',
+      href: '/styles/main.css',
+      position: 'end',
+      order: 1,
+    },
+  ],
 
-  // Set scripts in head
+  // Set inline styles in head
+  headInlineStyles: [
+    {
+      id: 'critical-css',
+      content: 'body { margin: 0; }',
+      position: 'beginning',
+      order: 0,
+    },
+  ],
+
+  // Set external scripts in head
   headScripts: [
     {
-      id: 'main-js', // Required: Unique script identifier
-      src: '/main.js', // Required: Script source path
-      position: 'end', // Required: Script position in head
-      type: 'text/javascript', // Optional: Script type
-      async: true, // Optional: Load script asynchronously
-      defer: false, // Optional: Defer script loading
-      order: 1, // Optional: Loading order
+      id: 'main-js',
+      src: '/main.js',
+      position: 'end',
+      type: 'module',
+      async: true,
+      defer: false,
+      crossOrigin: 'anonymous',
+      integrity: 'sha384-hash',
+      nonce: 'abc123',
+      order: 1,
     },
   ],
 
   // Set inline scripts in head
   headInlineScripts: [
     {
-      id: 'inline-script', // Required: Unique script identifier
-      position: 'end', // Required: Script position in head
-      content: 'console.log("Hello");', // Required: Script content
-      order: 2, // Optional: Loading order
+      id: 'inline-script',
+      content: 'console.log("Hello");',
+      position: 'end',
+      order: 2,
     },
   ],
 
   // Set scripts in body
   bodyScripts: [
     {
-      id: 'app-js', // Required: Unique script identifier
-      src: '/app.js', // Required: Script source path
-      position: 'end', // Required: Script position in body
-      type: 'text/javascript', // Optional: Script type
-      async: true, // Optional: Load script asynchronously
-      defer: false, // Optional: Defer script loading
-      order: 1, // Optional: Loading order
+      id: 'app-js',
+      src: '/app.js',
+      position: 'end',
+      type: 'module',
+      async: true,
+      defer: false,
+      order: 1,
     },
   ],
 };
@@ -106,9 +134,14 @@ const templateOptions: TemplateOptions = {
 // Use template options to modify HTML
 const modifiedHtml = parser
   .upsertTitleTag(templateOptions.title)
-  .upsertFaviconTag(templateOptions.favicon)
+  .upsertFaviconTag(
+    templateOptions.favicon.href,
+    templateOptions.favicon.rel,
+    templateOptions.favicon.attributes
+  )
   .upsertHeadMetaTags(templateOptions.headMetaTags)
   .upsertHeadStyles(templateOptions.headStyles)
+  .upsertHeadInlineStyles(templateOptions.headInlineStyles)
   .upsertHeadScripts(templateOptions.headScripts)
   .upsertHeadInlineScripts(templateOptions.headInlineScripts)
   .upsertBodyScripts(templateOptions.bodyScripts)
@@ -118,13 +151,83 @@ const modifiedHtml = parser
 #### Available Methods
 
 - `upsertTitleTag(title: string)`: Updates or inserts the page title
-- `upsertFaviconTag(favicon: string)`: Updates or inserts the favicon link
+- `upsertFaviconTag(href: string, rel?: string, attributes?: Record<string, string>)`: Updates or inserts the favicon link with optional rel and custom attributes
 - `upsertHeadMetaTags(tags: string[])`: Updates or inserts meta tags in the head
-- `upsertHeadStyles(styles: string[])`: Updates or inserts style tags in the head
-- `upsertHeadScripts(scripts: ScriptItem[])`: Updates or inserts script tags in the head
-- `upsertHeadInlineScripts(scripts: string[])`: Updates or inserts inline scripts in the head
+- `upsertHeadStyles(styles: StyleItem[])`: Updates or inserts external style links in the head
+- `upsertHeadInlineStyles(styles: StyleInlineItem[])`: Updates or inserts inline style tags in the head
+- `upsertHeadScripts(scripts: ScriptItem[])`: Updates or inserts external script tags in the head
+- `upsertHeadInlineScripts(scripts: ScriptionInlineItem[])`: Updates or inserts inline script tags in the head
 - `upsertBodyScripts(scripts: ScriptItem[])`: Updates or inserts script tags in the body
 - `serialize()`: Converts the modified document back to HTML string
+
+#### `parseTemplate` Function
+
+A utility function that provides a convenient way to parse and modify HTML templates in a single step.
+
+```typescript
+import { parseTemplate } from '@hyperse/html-webpack-plugin-loader';
+
+// Parse and modify HTML template in one go
+const modifiedHtml = parseTemplate(htmlSource, templateOptions);
+```
+
+The `parseTemplate` function is a shorthand for creating a `TemplateParser` instance and applying all template modifications at once. It accepts two parameters:
+
+- `htmlSource: string`: The source HTML template to parse and modify
+- `options: TemplateOptions`: The template modification options (same as described above)
+
+This function is particularly useful when you want to perform all template modifications in a single operation without manually chaining multiple method calls.
+
+#### Type Definitions
+
+```typescript
+type Position = 'beginning' | 'end';
+
+interface HtmlItemBase {
+  id: string;
+  position: Position;
+  order?: number;
+}
+
+interface StyleItem extends HtmlItemBase {
+  href: string;
+}
+
+interface StyleInlineItem extends HtmlItemBase {
+  content: string;
+}
+
+interface ScriptItem extends HtmlItemBase {
+  src: string;
+  type?: string;
+  async?: boolean;
+  defer?: boolean;
+  crossOrigin?: string;
+  integrity?: string;
+  nonce?: string;
+}
+
+interface ScriptionInlineItem extends HtmlItemBase {
+  content: string;
+}
+
+interface FaviconItem {
+  href: string;
+  rel: string;
+  attributes: Record<string, string>;
+}
+
+interface TemplateOptions {
+  title?: string;
+  favicon?: FaviconItem;
+  headMetaTags?: string[];
+  headStyles?: StyleItem[];
+  headInlineStyles?: StyleInlineItem[];
+  headScripts?: ScriptItem[];
+  headInlineScripts?: ScriptionInlineItem[];
+  bodyScripts?: ScriptItem[];
+}
+```
 
 ## Contributing
 

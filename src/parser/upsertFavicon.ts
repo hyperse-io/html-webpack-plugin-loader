@@ -9,7 +9,7 @@ import { type DefaultTreeAdapterTypes, parseFragment } from 'parse5';
  */
 export const upsertFavicon = (
   head: DefaultTreeAdapterTypes.Element,
-  favicon: string,
+  href: string,
   rel: string = 'icon',
   attributes: Record<string, string> = {}
 ) => {
@@ -32,7 +32,7 @@ export const upsertFavicon = (
     .join(' ');
 
   const linkNode = parseFragment(
-    `<link rel="${rel}" href="${favicon}" ${attributesString}>`
+    `<link rel="${rel}" href="${href}" ${attributesString}>`
   ).childNodes[0] as DefaultTreeAdapterTypes.Element;
 
   head.childNodes.push(linkNode);
