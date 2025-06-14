@@ -1,10 +1,10 @@
 import { type DefaultTreeAdapterTypes } from 'parse5';
 import { upsertHeadInlineScripts } from '../../src/parser/upsertHeadInlineScripts.js';
-import type { ScriptionInlineItem } from '../../src/types.js';
+import type { ScriptInlineItem } from '../../src/types.js';
 import { parseDocument } from '../../src/utils/parseDocument.js';
 
 describe('upsertHeadInlineScripts', () => {
-  const createScripts = (contents: string[]): ScriptionInlineItem[] => {
+  const createScripts = (contents: string[]): ScriptInlineItem[] => {
     return contents.map((content, index) => ({
       id: `script-${index}`,
       position: 'beginning',

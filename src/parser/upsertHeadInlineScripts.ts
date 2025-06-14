@@ -1,5 +1,5 @@
 import { type DefaultTreeAdapterTypes, parseFragment } from 'parse5';
-import type { ScriptionInlineItem } from '../types.js';
+import type { ScriptInlineItem } from '../types.js';
 
 /**
  * Upsert the inline scripts
@@ -8,7 +8,7 @@ import type { ScriptionInlineItem } from '../types.js';
  */
 export const upsertHeadInlineScripts = (
   head: DefaultTreeAdapterTypes.Element,
-  scripts: ScriptionInlineItem[]
+  scripts: ScriptInlineItem[]
 ) => {
   // Remove existing inline scripts with matching content
   scripts.forEach((script) => {

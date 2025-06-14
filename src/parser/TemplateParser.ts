@@ -1,7 +1,7 @@
 import type { DefaultTreeAdapterTypes } from 'parse5';
 import { serialize } from 'parse5';
 import type {
-  ScriptionInlineItem,
+  ScriptInlineItem,
   ScriptItem,
   StyleInlineItem,
   StyleItem,
@@ -98,9 +98,7 @@ export class TemplateParser {
    * @param scripts - The scripts to upsert
    * @returns The TemplateParser instance
    */
-  public upsertHeadInlineScripts(
-    scripts: ScriptionInlineItem[]
-  ): TemplateParser {
+  public upsertHeadInlineScripts(scripts: ScriptInlineItem[]): TemplateParser {
     upsertHeadInlineScripts(this.body, scripts);
     return this;
   }

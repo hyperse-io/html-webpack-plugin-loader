@@ -42,7 +42,7 @@ export type StyleInlineItem = HtmlItemBase & {
 /**
  * The inline script item
  */
-export type ScriptionInlineItem = HtmlItemBase & {
+export type ScriptInlineItem = HtmlItemBase & {
   /**
    * The content of the script
    */
@@ -129,7 +129,7 @@ export interface TemplateOptions {
   /**
    * The head inline scripts
    */
-  headInlineScripts?: ScriptionInlineItem[];
+  headInlineScripts?: ScriptInlineItem[];
   /**
    * The head inline styles
    */

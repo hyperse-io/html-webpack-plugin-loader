@@ -154,7 +154,7 @@ const modifiedHtml = parser
 - `upsertHeadStyles(styles: StyleItem[])`: Updates or inserts external style links in the head
 - `upsertHeadInlineStyles(styles: StyleInlineItem[])`: Updates or inserts inline style tags in the head
 - `upsertHeadScripts(scripts: ScriptItem[])`: Updates or inserts external script tags in the head
-- `upsertHeadInlineScripts(scripts: ScriptionInlineItem[])`: Updates or inserts inline script tags in the head
+- `upsertHeadInlineScripts(scripts: ScriptInlineItem[])`: Updates or inserts inline script tags in the head
 - `upsertBodyScripts(scripts: ScriptItem[])`: Updates or inserts script tags in the body
 - `serialize()`: Converts the modified document back to HTML string
 
@@ -205,7 +205,7 @@ interface ScriptItem extends HtmlItemBase {
   nonce?: string;
 }
 
-interface ScriptionInlineItem extends HtmlItemBase {
+interface ScriptInlineItem extends HtmlItemBase {
   content: string;
 }
 
@@ -222,7 +222,7 @@ interface TemplateOptions {
   headStyles?: StyleItem[];
   headInlineStyles?: StyleInlineItem[];
   headScripts?: ScriptItem[];
-  headInlineScripts?: ScriptionInlineItem[];
+  headInlineScripts?: ScriptInlineItem[];
   bodyScripts?: ScriptItem[];
 }
 ```
