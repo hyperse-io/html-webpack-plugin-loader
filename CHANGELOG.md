@@ -1,5 +1,11 @@
 # @hyperse/html-webpack-plugin-loader
 
+## 1.0.3
+
+### Patch Changes
+
+- [`866b3b5`](https://github.com/hyperse-io/html-webpack-plugin-loader/commit/866b3b577ebbec760e4f4a815f9231e7decb0f94) Thanks [@tianyingchun](https://github.com/tianyingchun)! - fix typo issue
+
 ## 1.0.2
 
 ### Patch Changes
