@@ -21,8 +21,6 @@ A TypeScript-based HTML template parser that provides a fluent API for manipulat
 
 ## Features
 
-## Features
-
 - 🔄 Fluent API for HTML manipulation
 - 🎯 Precise control over HTML document structure
 - 📦 Easy integration with webpack
@@ -160,7 +158,7 @@ const modifiedHtml = parser
 - `upsertBodyScripts(scripts: ScriptItem[])`: Updates or inserts script tags in the body
 - `serialize()`: Converts the modified document back to HTML string
 
-#### `parseTemplate` Function
+### `parseTemplate` Function
 
 A utility function that provides a convenient way to parse and modify HTML templates in a single step.
 
@@ -178,7 +176,7 @@ The `parseTemplate` function is a shorthand for creating a `TemplateParser` inst
 
 This function is particularly useful when you want to perform all template modifications in a single operation without manually chaining multiple method calls.
 
-#### Type Definitions
+### Type Definitions
 
 ```typescript
 type Position = 'beginning' | 'end';
