@@ -1,5 +1,11 @@
 # @hyperse/html-webpack-plugin-loader
 
+## 1.0.5
+
+### Patch Changes
+
+- [`a11409e`](https://github.com/hyperse-io/html-webpack-plugin-loader/commit/a11409ea50babaf211b8df9d1b04b1baa4df2f3b) Thanks [@tianyingchun](https://github.com/tianyingchun)! - improve parseTemplate api
+
 ## 1.0.4
 
 ### Patch Changes
