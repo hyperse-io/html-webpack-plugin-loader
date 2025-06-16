@@ -65,15 +65,18 @@ describe('upsertScripts', () => {
     const scripts: ScriptItem[] = [
       { id: 'test-script', src: 'test.js', position: 'end' },
     ];
-
+    const scripts2: ScriptItem[] = [
+      { id: 'test-script', src: 'test2.js', position: 'end' },
+    ];
     upsertScripts(element, scripts);
+    upsertScripts(element, scripts2);
 
     expect(element.childNodes.length).toBe(3);
     expect(
       (element.childNodes[2] as DefaultTreeAdapterTypes.Element).attrs?.find(
         (attr) => attr.name === 'src'
       )?.value
-    ).toBe('test.js');
+    ).toBe('test2.js');
   });
 
   it('should add all script attributes correctly', () => {
