@@ -3,7 +3,7 @@ import type { ScriptInlineItem } from '../types.js';
 
 /**
  * Upsert the inline scripts
- * @param body - The body element
+ * @param head - The body element
  * @param scripts - The sorted script items to upsert, javascript code
  */
 export const upsertHeadInlineScripts = (

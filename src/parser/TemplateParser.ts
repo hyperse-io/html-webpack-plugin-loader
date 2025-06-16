@@ -99,7 +99,7 @@ export class TemplateParser {
    * @returns The TemplateParser instance
    */
   public upsertHeadInlineScripts(scripts: ScriptInlineItem[]): TemplateParser {
-    upsertHeadInlineScripts(this.body, scripts);
+    upsertHeadInlineScripts(this.head, scripts);
     return this;
   }
 

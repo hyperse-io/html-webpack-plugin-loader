@@ -33,6 +33,10 @@ export const parseTemplate = (
     parser.upsertHeadStyles(options.headStyles);
   }
 
+  if (options.headInlineStyles?.length) {
+    parser.upsertHeadInlineStyles(options.headInlineStyles);
+  }
+
   if (options.headScripts?.length) {
     parser.upsertHeadScripts(options.headScripts);
   }
