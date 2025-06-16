@@ -1,5 +1,11 @@
 # @hyperse/html-webpack-plugin-loader
 
+## 1.0.4
+
+### Patch Changes
+
+- [`f831844`](https://github.com/hyperse-io/html-webpack-plugin-loader/commit/f831844c7d3c81e21d8e8050817ef9ca94eda0e3) Thanks [@tianyingchun](https://github.com/tianyingchun)! - fix missed `headInlineStyles` imports
+
 ## 1.0.3
 
 ### Patch Changes
