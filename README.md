@@ -166,7 +166,7 @@ A utility function that provides a convenient way to parse and modify HTML templ
 import { parseTemplate } from '@hyperse/html-webpack-plugin-loader';
 
 // Parse and modify HTML template in one go
-const modifiedHtml = parseTemplate(htmlSource, templateOptions);
+const modifiedHtml = parseTemplate(htmlSource, templateOptions).serialize();
 ```
 
 The `parseTemplate` function is a shorthand for creating a `TemplateParser` instance and applying all template modifications at once. It accepts two parameters:

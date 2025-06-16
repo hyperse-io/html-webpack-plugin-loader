@@ -10,7 +10,7 @@ import { TemplateParser } from './TemplateParser.js';
 export const parseTemplate = (
   htmlSource: string,
   options: TemplateOptions = {}
-): string => {
+): TemplateParser => {
   const parser = new TemplateParser(htmlSource);
 
   if (options.title) {
@@ -49,5 +49,5 @@ export const parseTemplate = (
     parser.upsertBodyScripts(options.bodyScripts);
   }
 
-  return parser.serialize();
+  return parser;
 };

@@ -47,7 +47,7 @@ export default function htmlLoader(
     'const parseTemplate = ' + parseTemplate.toString() + ';',
     'const source = ' + JSON.stringify(source) + ';',
     'module.exports = (function(templateParams) { ',
-    'return parseTemplate(source, templateParams || {});',
+    'return parseTemplate(source, templateParams || {}).serialize();',
     '});',
   ].join('');
 }
