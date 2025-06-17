@@ -1,5 +1,4 @@
-import type { DefaultTreeAdapterTypes } from 'parse5';
-import { serialize } from 'parse5';
+import { type DefaultTreeAdapterTypes, parseFragment, serialize } from 'parse5';
 import type {
   ScriptInlineItem,
   ScriptItem,
@@ -16,9 +15,9 @@ import { upsertScripts } from './upsertScripts.js';
 import { upsertTitle } from './upsertTitle.js';
 
 export class TemplateParser {
-  private document: DefaultTreeAdapterTypes.Document;
-  private head: DefaultTreeAdapterTypes.Element;
-  private body: DefaultTreeAdapterTypes.Element;
+  protected readonly document: DefaultTreeAdapterTypes.Document;
+  protected readonly head: DefaultTreeAdapterTypes.Element;
+  protected readonly body: DefaultTreeAdapterTypes.Element;
 
   constructor(htmlSource: string) {
     const { document, head, body } = parseDocument(htmlSource);
@@ -119,5 +118,14 @@ export class TemplateParser {
    */
   public serialize(): string {
     return serialize(this.document);
+  }
+
+  /**
+   * Parse a fragment of html
+   * @param html - The html fragment to parse
+   * @returns The parsed document fragment
+   */
+  public parseFragment(html: string): DefaultTreeAdapterTypes.DocumentFragment {
+    return parseFragment(html);
   }
 }

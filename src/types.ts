@@ -1,3 +1,5 @@
+export { type DefaultTreeAdapterTypes } from 'parse5';
+
 /**
  * The position of the script
  */
