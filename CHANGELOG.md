@@ -1,5 +1,11 @@
 # @hyperse/html-webpack-plugin-loader
 
+## 1.0.6
+
+### Patch Changes
+
+- [`b26dac9`](https://github.com/hyperse-io/html-webpack-plugin-loader/commit/b26dac95eb79f39426f02bc306e3d030c61ef91d) Thanks [@tianyingchun](https://github.com/tianyingchun)! - allow class inherits to access document, body, head
+
 ## 1.0.5
 
 ### Patch Changes
