@@ -1,6 +1,6 @@
 {
   "name": "@hyperse/html-webpack-plugin-loader",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A custom template loader that parses HTML templates for the `html-webpack-plugin` package",
   "keywords": [
     "hyperse",

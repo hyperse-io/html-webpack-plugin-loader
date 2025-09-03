@@ -1,5 +1,13 @@
 # @hyperse/html-webpack-plugin-loader
 
+## 1.0.7
+
+### Patch Changes
+
+- [`b6b3b3d`](https://github.com/hyperse-io/html-webpack-plugin-loader/commit/b6b3b3dc35793d623d6fdaeab125e1518f01698e) Thanks [@tyc15129](https://github.com/tyc15129)! - Enhanced template parsing logic to ensure correct order of head elements based on new `data-order` and `data-position` attributes.
+
+- [`c8dc854`](https://github.com/hyperse-io/html-webpack-plugin-loader/commit/c8dc854fd0480ca45dd229d3e248d349e687bf9e) Thanks [@tyc15129](https://github.com/tyc15129)! - Implement cleanup of data-order and data-position attributes
+
 ## 1.0.6
 
 ### Patch Changes
