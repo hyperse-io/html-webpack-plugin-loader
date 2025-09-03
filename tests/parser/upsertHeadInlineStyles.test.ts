@@ -33,8 +33,13 @@ describe('upsertHeadInlineStyles', () => {
 
   it('should add styles at beginning and end correctly', () => {
     const styles: StyleInlineItem[] = [
-      { id: 'end-style', content: 'p {}', position: 'end' },
-      { id: 'beginning-style', content: 'div {}', position: 'beginning' },
+      { id: 'end-style', content: 'p {}', position: 'end', order: 1 },
+      {
+        id: 'beginning-style',
+        content: 'div {}',
+        position: 'beginning',
+        order: 1,
+      },
     ];
 
     upsertHeadInlineStyles(head, styles);
@@ -49,7 +54,12 @@ describe('upsertHeadInlineStyles', () => {
 
   it('should remove existing styles with matching ids', () => {
     const styles: StyleInlineItem[] = [
-      { id: 'existing-style', content: 'new-style {}', position: 'end' },
+      {
+        id: 'existing-style',
+        content: 'new-style {}',
+        position: 'end',
+        order: 1,
+      },
     ];
 
     upsertHeadInlineStyles(head, styles);

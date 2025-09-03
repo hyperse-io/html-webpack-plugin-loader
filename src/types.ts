@@ -21,7 +21,7 @@ export type HtmlItemBase = {
   /**
    * The order of the script, smaller numbers are loaded first
    */
-  order?: number;
+  order: number;
 };
 
 export type StyleItem = HtmlItemBase & {

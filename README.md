@@ -383,23 +383,19 @@ The loader accepts only one option:
 ### Best Practices
 
 1. **Template Organization**:
-
    - Keep your HTML templates in a dedicated directory (e.g., `src/templates/`)
    - Use consistent naming conventions for your template files
 
 2. **Environment-specific Configuration**:
-
    - Use webpack's environment configuration to manage different settings for development and production
    - Consider using environment variables for sensitive or environment-specific values
 
 3. **Performance Optimization**:
-
    - Use `position: 'end'` for non-critical scripts and styles
    - Use `position: 'beginning'` for critical resources
    - Consider using `order` property to control the loading sequence
 
 4. **Security**:
-
    - Always use `integrity` checks for external resources when possible
    - Use `nonce` for inline scripts when implementing CSP
    - Set appropriate `crossOrigin` attributes for external resources

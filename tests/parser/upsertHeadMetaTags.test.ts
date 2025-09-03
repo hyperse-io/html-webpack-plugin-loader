@@ -47,6 +47,7 @@ describe('upsertHeadMetaTags', () => {
 
     upsertHeadMetaTags(head, tags);
 
+    // Keep update order.
     expect(head.childNodes).toHaveLength(2);
   });
 });

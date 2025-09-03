@@ -36,7 +36,7 @@ export const upsertHeadStyles = (
   // Create new style nodes
   const styleTags = sortedStyles.map((style) => {
     const styleNode = parseFragment(
-      `<link rel="stylesheet" href="${style.href}" id="${style.id}"></link>`
+      `<link rel="stylesheet" href="${style.href}" id="${style.id}" data-order="${style.order}" data-position="${style.position}"></link>`
     ).childNodes[0] as DefaultTreeAdapterTypes.Element;
 
     return styleNode;

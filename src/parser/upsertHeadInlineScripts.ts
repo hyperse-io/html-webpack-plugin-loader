@@ -34,7 +34,7 @@ export const upsertHeadInlineScripts = (
   // Create script nodes
   const scriptTags = sortedScripts.map((script) => {
     const scriptNode = parseFragment(
-      `<script id="${script.id}">${script.content}</script>`
+      `<script id="${script.id}" data-order="${script.order}" data-position="${script.position}">${script.content}</script>`
     ).childNodes[0] as DefaultTreeAdapterTypes.Element;
     return scriptNode;
   });

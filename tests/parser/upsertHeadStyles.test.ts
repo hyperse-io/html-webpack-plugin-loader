@@ -23,6 +23,8 @@ describe('upsertHeadStyles', () => {
       { name: 'rel', value: 'stylesheet' },
       { name: 'href', value: '/style2.css' },
       { name: 'id', value: 'style2' },
+      { name: 'data-order', value: '1' },
+      { name: 'data-position', value: 'beginning' },
     ]);
 
     const link2 = head.childNodes[1] as DefaultTreeAdapterTypes.Element;
@@ -30,6 +32,8 @@ describe('upsertHeadStyles', () => {
       { name: 'rel', value: 'stylesheet' },
       { name: 'href', value: '/style3.css' },
       { name: 'id', value: 'style3' },
+      { name: 'data-order', value: '1' },
+      { name: 'data-position', value: 'end' },
     ]);
 
     const link3 = head.childNodes[2] as DefaultTreeAdapterTypes.Element;
@@ -37,14 +41,16 @@ describe('upsertHeadStyles', () => {
       { name: 'rel', value: 'stylesheet' },
       { name: 'href', value: '/style1.css' },
       { name: 'id', value: 'style1' },
+      { name: 'data-order', value: '2' },
+      { name: 'data-position', value: 'end' },
     ]);
   });
 
   it('should add stylesheet links when none exist', () => {
     const { head } = parseDocument('<head></head>');
     const styles: StyleItem[] = [
-      { href: '/style1.css', id: 'style1', position: 'beginning' },
-      { href: '/style2.css', id: 'style2', position: 'end' },
+      { href: '/style1.css', id: 'style1', position: 'beginning', order: 1 },
+      { href: '/style2.css', id: 'style2', position: 'end', order: 1 },
     ];
 
     upsertHeadStyles(head, styles);
@@ -57,6 +63,8 @@ describe('upsertHeadStyles', () => {
       { name: 'rel', value: 'stylesheet' },
       { name: 'href', value: '/style1.css' },
       { name: 'id', value: 'style1' },
+      { name: 'data-order', value: '1' },
+      { name: 'data-position', value: 'beginning' },
     ]);
 
     const link2 = head.childNodes[1] as DefaultTreeAdapterTypes.Element;
@@ -64,6 +72,8 @@ describe('upsertHeadStyles', () => {
       { name: 'rel', value: 'stylesheet' },
       { name: 'href', value: '/style2.css' },
       { name: 'id', value: 'style2' },
+      { name: 'data-order', value: '1' },
+      { name: 'data-position', value: 'end' },
     ]);
   });
 
@@ -73,7 +83,12 @@ describe('upsertHeadStyles', () => {
     );
 
     upsertHeadStyles(head, [
-      { href: '/old-style.css', id: 'old-style', position: 'beginning' },
+      {
+        href: '/old-style.css',
+        id: 'old-style',
+        position: 'beginning',
+        order: 1,
+      },
     ]);
 
     expect(head.childNodes).toHaveLength(1);
@@ -82,6 +97,8 @@ describe('upsertHeadStyles', () => {
       { name: 'rel', value: 'stylesheet' },
       { name: 'href', value: '/old-style.css' },
       { name: 'id', value: 'old-style' },
+      { name: 'data-order', value: '1' },
+      { name: 'data-position', value: 'beginning' },
     ]);
   });
 

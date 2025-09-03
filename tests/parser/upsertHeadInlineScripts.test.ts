@@ -9,6 +9,7 @@ describe('upsertHeadInlineScripts', () => {
       id: `script-${index}`,
       position: 'beginning',
       content,
+      order: index + 1,
     }));
   };
 

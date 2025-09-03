@@ -33,7 +33,7 @@ export const upsertScripts = (
   // Create new script nodes
   const scriptTags = sortedScripts.map((script) => {
     const scriptNode = parseFragment(
-      `<script id="${script.id}" src="${script.src}"></script>`
+      `<script id="${script.id}" src="${script.src}" data-order="${script.order}" data-position="${script.position}"></script>`
     ).childNodes[0] as DefaultTreeAdapterTypes.Element;
 
     if (script.type) {

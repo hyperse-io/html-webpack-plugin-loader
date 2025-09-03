@@ -33,7 +33,7 @@ export const upsertHeadInlineStyles = (
   // Create new style nodes
   const styleTags = sortedStyles.map((style) => {
     const styleNode = parseFragment(
-      `<style id="${style.id}">${style.content}</style>`
+      `<style id="${style.id}" data-order="${style.order}" data-position="${style.position}">${style.content}</style>`
     ).childNodes[0] as DefaultTreeAdapterTypes.Element;
 
     return styleNode;

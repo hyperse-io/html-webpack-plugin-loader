@@ -6,6 +6,8 @@ import type {
   StyleItem,
 } from '../types.js';
 import { parseDocument } from '../utils/parseDocument.js';
+import { sortDocument } from '../utils/sortDocument.js';
+import { upsertBodySctipts } from './upsertBodySctipts.js';
 import { upsertFavicon } from './upsertFavicon.js';
 import { upsertHeadInlineScripts } from './upsertHeadInlineScripts.js';
 import { upsertHeadInlineStyles } from './upsertHeadInlineStyles.js';
@@ -18,16 +20,18 @@ export class TemplateParser {
   protected readonly document: DefaultTreeAdapterTypes.Document;
   protected readonly head: DefaultTreeAdapterTypes.Element;
   protected readonly body: DefaultTreeAdapterTypes.Element;
+  protected readonly html: DefaultTreeAdapterTypes.Element;
 
   constructor(htmlSource: string) {
-    const { document, head, body } = parseDocument(htmlSource);
+    const { document, head, body, html } = parseDocument(htmlSource);
     this.document = document;
+    this.html = html;
     this.head = head;
     this.body = body;
   }
 
   /**
-   * Upsert the title tag
+   * Upsert the title tag - inserts at beginning of <head>
    * @param title - The title to upsert
    * @returns The TemplateParser instance
    */
@@ -37,7 +41,7 @@ export class TemplateParser {
   }
 
   /**
-   * Upsert the favicon tag
+   * Upsert the favicon tag - inserts at beginning of <head> after title tag
    * @param href - The favicon to upsert
    * @param rel - The rel attribute of the favicon tag
    * @param attributes - The attributes of the favicon tag
@@ -53,8 +57,8 @@ export class TemplateParser {
   }
 
   /**
-   * Upsert the head before html tags
-   * @param tags - The tags to upsert
+   * Upsert meta tags in <head> - inserts at beginning for SEO priority
+   * @param tags - The meta tags to upsert
    * @returns The TemplateParser instance
    */
   public upsertHeadMetaTags(tags: string[]): TemplateParser {
@@ -63,8 +67,8 @@ export class TemplateParser {
   }
 
   /**
-   * Upsert the head before styles
-   * @param styles - The styles to upsert
+   * Upsert external stylesheets in <head> - supports position-based insertion
+   * @param styles - The external styles to upsert
    * @returns The TemplateParser instance
    */
   public upsertHeadStyles(styles: StyleItem[]): TemplateParser {
@@ -73,8 +77,8 @@ export class TemplateParser {
   }
 
   /**
-   * Upsert the head inline styles
-   * @param styles - The styles to upsert
+   * Upsert inline styles in <head> - supports position-based insertion
+   * @param styles - The inline styles to upsert
    * @returns The TemplateParser instance
    */
   public upsertHeadInlineStyles(styles: StyleInlineItem[]): TemplateParser {
@@ -83,8 +87,8 @@ export class TemplateParser {
   }
 
   /**
-   * Upsert the head before scripts
-   * @param scripts - The scripts to upsert
+   * Upsert external scripts in <head> - supports position-based insertion
+   * @param scripts - The external scripts to upsert
    * @returns The TemplateParser instance
    */
   public upsertHeadScripts(scripts: ScriptItem[]): TemplateParser {
@@ -93,8 +97,8 @@ export class TemplateParser {
   }
 
   /**
-   * Upsert the inline scripts
-   * @param scripts - The scripts to upsert
+   * Upsert inline scripts in <head> - supports position-based insertion
+   * @param scripts - The inline scripts to upsert
    * @returns The TemplateParser instance
    */
   public upsertHeadInlineScripts(scripts: ScriptInlineItem[]): TemplateParser {
@@ -103,12 +107,12 @@ export class TemplateParser {
   }
 
   /**
-   * Upsert the body after scripts
+   * Upsert scripts in <body> - supports position-based insertion, typically at end for performance
    * @param scripts - The scripts to upsert
    * @returns The TemplateParser instance
    */
   public upsertBodyScripts(scripts: ScriptItem[]): TemplateParser {
-    upsertScripts(this.body, scripts);
+    upsertBodySctipts(this.body, scripts);
     return this;
   }
 
@@ -117,7 +121,8 @@ export class TemplateParser {
    * @returns The serialized html string
    */
   public serialize(): string {
-    return serialize(this.document);
+    const sortedDocument = sortDocument(this.document);
+    return serialize(sortedDocument);
   }
 
   /**

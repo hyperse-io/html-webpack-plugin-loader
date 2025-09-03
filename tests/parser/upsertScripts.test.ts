@@ -38,8 +38,13 @@ describe('upsertScripts', () => {
 
   it('should add scripts at beginning and end correctly', () => {
     const scripts: ScriptItem[] = [
-      { id: 'end-script', src: 'end.js', position: 'end' },
-      { id: 'beginning-script', src: 'beginning.js', position: 'beginning' },
+      { id: 'end-script', src: 'end.js', position: 'end', order: 1 },
+      {
+        id: 'beginning-script',
+        src: 'beginning.js',
+        position: 'beginning',
+        order: 1,
+      },
     ];
 
     upsertScripts(element, scripts);
@@ -63,10 +68,10 @@ describe('upsertScripts', () => {
     element.childNodes.push(existingScript as DefaultTreeAdapterTypes.Element);
 
     const scripts: ScriptItem[] = [
-      { id: 'test-script', src: 'test.js', position: 'end' },
+      { id: 'test-script', src: 'test.js', position: 'end', order: 1 },
     ];
     const scripts2: ScriptItem[] = [
-      { id: 'test-script', src: 'test2.js', position: 'end' },
+      { id: 'test-script', src: 'test2.js', position: 'end', order: 1 },
     ];
     upsertScripts(element, scripts);
     upsertScripts(element, scripts2);
@@ -85,6 +90,7 @@ describe('upsertScripts', () => {
         id: 'test-script',
         src: 'test.js',
         position: 'end',
+        order: 1,
         type: 'module',
         async: true,
         defer: true,

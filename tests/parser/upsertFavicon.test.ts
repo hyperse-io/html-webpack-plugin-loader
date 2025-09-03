@@ -68,16 +68,16 @@ describe('upsertFavicon', () => {
 
     expect(head.childNodes).toHaveLength(2);
 
-    const iconNode = head.childNodes[0] as DefaultTreeAdapterTypes.Element;
-    expect(iconNode.attrs).toEqual([
-      { name: 'rel', value: 'icon' },
+    const shortcutIconNode = head
+      .childNodes[0] as DefaultTreeAdapterTypes.Element;
+    expect(shortcutIconNode.attrs).toEqual([
+      { name: 'rel', value: 'shortcut icon' },
       { name: 'href', value: '/favicon.ico' },
     ]);
 
-    const shortcutIconNode = head
-      .childNodes[1] as DefaultTreeAdapterTypes.Element;
-    expect(shortcutIconNode.attrs).toEqual([
-      { name: 'rel', value: 'shortcut icon' },
+    const iconNode = head.childNodes[1] as DefaultTreeAdapterTypes.Element;
+    expect(iconNode.attrs).toEqual([
+      { name: 'rel', value: 'icon' },
       { name: 'href', value: '/favicon.ico' },
     ]);
   });

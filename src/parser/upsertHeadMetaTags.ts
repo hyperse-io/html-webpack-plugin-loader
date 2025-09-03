@@ -37,9 +37,13 @@ export const upsertHeadMetaTags = (
     }
   });
 
-  // Add new tags
+  // Add new tags in reverse order to maintain proper sequence when using unshift
   const parsedTags = tags.map(
     (tag) => parseFragment(tag).childNodes[0] as DefaultTreeAdapterTypes.Element
   );
-  head.childNodes.unshift(...parsedTags);
+
+  // Insert in reverse order so they appear in the correct sequence
+  parsedTags.reverse().forEach((tag) => {
+    head.childNodes.unshift(tag);
+  });
 };

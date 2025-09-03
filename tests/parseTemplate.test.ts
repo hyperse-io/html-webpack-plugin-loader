@@ -35,8 +35,12 @@ describe('parseTemplate', () => {
         { id: 'script2', src: 'script2.js', position: 'beginning', order: 2 },
       ])
       .serialize();
-    expect(result).toContain('<script id="script1" src="script1.js"></script>');
-    expect(result).toContain('<script id="script2" src="script2.js"></script>');
+    expect(result).toContain(
+      '<script id="script1" src="script1.js" data-order="1" data-position="beginning"></script>'
+    );
+    expect(result).toContain(
+      '<script id="script2" src="script2.js" data-order="2" data-position="beginning"></script>'
+    );
   });
 
   it('should update favicon when provided', () => {
@@ -70,13 +74,14 @@ describe('parseTemplate', () => {
         href: 'style.css',
         id: 'style1',
         position: 'beginning',
+        order: 1,
       },
     ];
     const parser = parseTemplate('<html><head></head></html>', {
       headStyles: styles,
     });
     expect(parser.serialize()).toContain(
-      '<link rel="stylesheet" href="style.css" id="style1">'
+      '<link rel="stylesheet" href="style.css" id="style1" data-order="1" data-position="beginning">'
     );
   });
 
@@ -86,12 +91,15 @@ describe('parseTemplate', () => {
         content: 'body {}',
         id: 'style1',
         position: 'beginning',
+        order: 1,
       },
     ];
     const parser = parseTemplate('<html><head></head></html>', {
       headInlineStyles: inlineStyles,
     });
-    expect(parser.serialize()).toContain('<style id="style1">body {}</style>');
+    expect(parser.serialize()).toContain(
+      '<style id="style1" data-order="1" data-position="beginning">body {}</style>'
+    );
   });
 
   it('should update head scripts when provided', () => {
@@ -100,13 +108,14 @@ describe('parseTemplate', () => {
         src: 'script.js',
         id: 'script1',
         position: 'beginning',
+        order: 1,
       },
     ];
     const parser = parseTemplate('<html><head></head></html>', {
       headScripts: scripts,
     });
     expect(parser.serialize()).toContain(
-      '<script id="script1" src="script.js"></script>'
+      '<script id="script1" src="script.js" data-order="1" data-position="beginning"></script>'
     );
   });
 
@@ -116,13 +125,14 @@ describe('parseTemplate', () => {
         content: 'console.log()',
         id: 'script1',
         position: 'beginning',
+        order: 1,
       },
     ];
     const parser = parseTemplate('<html><head></head></html>', {
       headInlineScripts: inlineScripts,
     });
     expect(parser.serialize()).toContain(
-      '<script id="script1">console.log()</script>'
+      '<script id="script1" data-order="1" data-position="beginning">console.log()</script>'
     );
   });
 
@@ -132,13 +142,14 @@ describe('parseTemplate', () => {
         src: 'script.js',
         id: 'script1',
         position: 'beginning',
+        order: 1,
       },
     ];
     const parser = parseTemplate('<html><head></head><body></body></html>', {
       bodyScripts: bodyScripts,
     });
     expect(parser.serialize()).toContain(
-      '<script id="script1" src="script.js"></script>'
+      '<script id="script1" src="script.js" data-order="1" data-position="beginning"></script>'
     );
   });
 });
