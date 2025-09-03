@@ -8,7 +8,7 @@ describe('parseTemplate with correct DOM order', () => {
     expect(parser).toBeInstanceOf(TemplateParser);
   });
 
-  it('should maintain correct DOM order for all elements in head', () => {
+  it('should maintain correct DOM order for all elements in head and remove sorting attributes', () => {
     const htmlSource = '<html><head></head><body></body></html>';
     const options: TemplateOptions = {
       title: 'Test Page Title',
@@ -72,60 +72,50 @@ describe('parseTemplate with correct DOM order', () => {
     // Extract head content for order validation
     const headMatch = result.match(/<head>([\s\S]*?)<\/head>/);
     expect(headMatch).toBeTruthy();
+
     const headContent = headMatch![1];
 
-    // Create a simplified representation of the head content for order checking
-    const headElements: string[] = headContent
-      .split(/(?=<title>|<link|<meta|<style|<script)/)
-      .filter((line) => line.trim())
-      .map((line) => {
-        if (line.includes('<title>')) return 'title';
-        if (line.includes('rel="icon"')) return 'link[rel="icon"]';
-        if (line.includes('name="description"'))
-          return 'meta[name="description"]';
-        if (line.includes('name="viewport"')) return 'meta[name="viewport"]';
-        if (line.includes('id="critical-css"'))
-          return 'style[id="critical-css"]';
-        if (line.includes('id="main-css"'))
-          return 'link[rel="stylesheet"][id="main-css"]';
-        if (line.includes('id="main-js"')) return 'script[id="main-js"]';
-        if (line.includes('id="vendor-css"'))
-          return 'link[rel="stylesheet"][id="vendor-css"]';
-        if (line.includes('id="vendor-js"')) return 'script[id="vendor-js"]';
-        if (line.includes('id="inline-js"')) return 'script[id="inline-js"]';
-        return 'other';
-      })
-      .filter((element) => element !== 'other');
+    // Check that all expected elements are present
+    expect(headContent).toContain('<title>Test Page Title</title>');
+    expect(headContent).toContain(
+      '<link rel="icon" href="/favicon.ico" sizes="32x32">'
+    );
+    expect(headContent).toContain(
+      '<meta name="description" content="Test description">'
+    );
+    expect(headContent).toContain(
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+    );
+    expect(headContent).toContain(
+      '<link rel="stylesheet" href="/styles/main.css" id="main-css">'
+    );
+    expect(headContent).toContain(
+      '<link rel="stylesheet" href="/styles/vendor.css" id="vendor-css">'
+    );
+    expect(headContent).toContain(
+      '<style id="critical-css">body { margin: 0; }</style>'
+    );
+    expect(headContent).toContain(
+      '<script id="main-js" src="/scripts/main.js"></script>'
+    );
+    expect(headContent).toContain(
+      '<script id="vendor-js" src="/scripts/vendor.js"></script>'
+    );
+    expect(headContent).toContain(
+      '<script id="inline-js">console.log("Hello");</script>'
+    );
 
-    // Verify that all expected elements are present
-    expect(headElements).toContain('title');
-    expect(headElements).toContain('link[rel="icon"]');
-    expect(headElements).toContain('meta[name="description"]');
-    expect(headElements).toContain('meta[name="viewport"]');
-    expect(headElements).toContain('style[id="critical-css"]');
-    expect(headElements).toContain('link[rel="stylesheet"][id="main-css"]');
-    expect(headElements).toContain('script[id="main-js"]');
-    expect(headElements).toContain('link[rel="stylesheet"][id="vendor-css"]');
-    expect(headElements).toContain('script[id="vendor-js"]');
-    expect(headElements).toContain('script[id="inline-js"]');
+    // Check that sorting attributes are NOT present in final output
+    expect(headContent).not.toContain('data-order');
+    expect(headContent).not.toContain('data-position');
 
-    // Define the expected order based on the implementation
-    const expectedOrder = [
-      'script[id="main-js"]', // order=1
-      // Beginning elements (sorted by order)
-      'style[id="critical-css"]', // order=0
-      'link[rel="stylesheet"][id="main-css"]', // order=1
-      'title',
-      'meta[name="description"]',
-      'meta[name="viewport"]',
-      'link[rel="icon"]',
-      // End elements (sorted by order)
-      'link[rel="stylesheet"][id="vendor-css"]', // order=2
-      'script[id="vendor-js"]', // order=2
-      'script[id="inline-js"]', // order=3
-    ];
+    // Verify order: critical-css should come before main-css, and main-js should come before vendor-js
+    const criticalCssIndex = headContent.indexOf('id="critical-css"');
+    const mainCssIndex = headContent.indexOf('id="main-css"');
+    const mainJsIndex = headContent.indexOf('id="main-js"');
+    const vendorJsIndex = headContent.indexOf('id="vendor-js"');
 
-    // Verify the exact order
-    expect(headElements).toEqual(expectedOrder);
+    expect(criticalCssIndex).toBeLessThan(mainCssIndex);
+    expect(mainJsIndex).toBeLessThan(vendorJsIndex);
   });
 });

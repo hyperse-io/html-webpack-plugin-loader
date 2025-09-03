@@ -67,6 +67,9 @@ export const sortDocument = (document: DefaultTreeAdapterTypes.Document) => {
 
       return !!(hasId && hasOrder && hasPosition);
     });
+
+    // Clean up data-order and data-position attributes from head
+    cleanupSortingAttributes(head);
   }
 
   if (body) {
@@ -84,6 +87,9 @@ export const sortDocument = (document: DefaultTreeAdapterTypes.Document) => {
 
       return !!(hasId && hasOrder && hasPosition);
     });
+
+    // Clean up data-order and data-position attributes from body
+    cleanupSortingAttributes(body);
   }
 
   // 4. resort all nodes by data-order and data-position
@@ -159,5 +165,30 @@ const sortNodesByPosition = (
   // Insert end nodes at the end of the element
   endNodes.forEach(({ node }) => {
     element.childNodes.push(node);
+  });
+};
+
+/**
+ * Remove data-order and data-position attributes from all child nodes recursively
+ * @param element - The element to clean up attributes from
+ */
+const cleanupSortingAttributes = (element: DefaultTreeAdapterTypes.Element) => {
+  // Clean up attributes from the current element
+  if (element.attrs) {
+    element.attrs = element.attrs.filter(
+      (attr) => attr.name !== 'data-order' && attr.name !== 'data-position'
+    );
+  }
+
+  // Recursively clean up attributes from all child nodes
+  element.childNodes.forEach((node) => {
+    if (
+      node.nodeName &&
+      node.nodeName !== '#text' &&
+      node.nodeName !== '#comment'
+    ) {
+      const childElement = node as DefaultTreeAdapterTypes.Element;
+      cleanupSortingAttributes(childElement);
+    }
   });
 };

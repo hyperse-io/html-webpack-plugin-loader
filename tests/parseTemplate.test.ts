@@ -20,7 +20,7 @@ describe('parseTemplate', () => {
     expect(result).toContain('<title>Test Title 2</title>');
   });
 
-  it('should corrent upsert body script by order', () => {
+  it('should correctly upsert body script by order and remove sorting attributes', () => {
     const parser = parseTemplate('<html><body></body></html>', {
       bodyScripts: [
         { id: 'script1', src: 'script1.js', position: 'beginning', order: 1 },
@@ -35,12 +35,15 @@ describe('parseTemplate', () => {
         { id: 'script2', src: 'script2.js', position: 'beginning', order: 2 },
       ])
       .serialize();
-    expect(result).toContain(
-      '<script id="script1" src="script1.js" data-order="1" data-position="beginning"></script>'
-    );
-    expect(result).toContain(
-      '<script id="script2" src="script2.js" data-order="2" data-position="beginning"></script>'
-    );
+
+    // Check that scripts are present but sorting attributes are removed
+    expect(result).toContain('<script id="script1" src="script1.js"></script>');
+    expect(result).toContain('<script id="script2" src="script2.js"></script>');
+
+    // Check that sorting attributes are not present in final output
+    expect(result).not.toContain('data-order="1"');
+    expect(result).not.toContain('data-order="2"');
+    expect(result).not.toContain('data-position="beginning"');
   });
 
   it('should update favicon when provided', () => {
@@ -68,7 +71,7 @@ describe('parseTemplate', () => {
     );
   });
 
-  it('should update head styles when provided', () => {
+  it('should update head styles when provided and remove sorting attributes', () => {
     const styles: StyleItem[] = [
       {
         href: 'style.css',
@@ -80,12 +83,19 @@ describe('parseTemplate', () => {
     const parser = parseTemplate('<html><head></head></html>', {
       headStyles: styles,
     });
-    expect(parser.serialize()).toContain(
-      '<link rel="stylesheet" href="style.css" id="style1" data-order="1" data-position="beginning">'
+    const result = parser.serialize();
+
+    // Check that style is present but sorting attributes are removed
+    expect(result).toContain(
+      '<link rel="stylesheet" href="style.css" id="style1">'
     );
+
+    // Check that sorting attributes are not present in final output
+    expect(result).not.toContain('data-order="1"');
+    expect(result).not.toContain('data-position="beginning"');
   });
 
-  it('should update inline styles when provided', () => {
+  it('should update inline styles when provided and remove sorting attributes', () => {
     const inlineStyles: StyleInlineItem[] = [
       {
         content: 'body {}',
@@ -97,12 +107,17 @@ describe('parseTemplate', () => {
     const parser = parseTemplate('<html><head></head></html>', {
       headInlineStyles: inlineStyles,
     });
-    expect(parser.serialize()).toContain(
-      '<style id="style1" data-order="1" data-position="beginning">body {}</style>'
-    );
+    const result = parser.serialize();
+
+    // Check that style is present but sorting attributes are removed
+    expect(result).toContain('<style id="style1">body {}</style>');
+
+    // Check that sorting attributes are not present in final output
+    expect(result).not.toContain('data-order="1"');
+    expect(result).not.toContain('data-position="beginning"');
   });
 
-  it('should update head scripts when provided', () => {
+  it('should update head scripts when provided and remove sorting attributes', () => {
     const scripts: ScriptItem[] = [
       {
         src: 'script.js',
@@ -114,12 +129,17 @@ describe('parseTemplate', () => {
     const parser = parseTemplate('<html><head></head></html>', {
       headScripts: scripts,
     });
-    expect(parser.serialize()).toContain(
-      '<script id="script1" src="script.js" data-order="1" data-position="beginning"></script>'
-    );
+    const result = parser.serialize();
+
+    // Check that script is present but sorting attributes are removed
+    expect(result).toContain('<script id="script1" src="script.js"></script>');
+
+    // Check that sorting attributes are not present in final output
+    expect(result).not.toContain('data-order="1"');
+    expect(result).not.toContain('data-position="beginning"');
   });
 
-  it('should update head inline scripts when provided', () => {
+  it('should update head inline scripts when provided and remove sorting attributes', () => {
     const inlineScripts: ScriptInlineItem[] = [
       {
         content: 'console.log()',
@@ -131,12 +151,17 @@ describe('parseTemplate', () => {
     const parser = parseTemplate('<html><head></head></html>', {
       headInlineScripts: inlineScripts,
     });
-    expect(parser.serialize()).toContain(
-      '<script id="script1" data-order="1" data-position="beginning">console.log()</script>'
-    );
+    const result = parser.serialize();
+
+    // Check that script is present but sorting attributes are removed
+    expect(result).toContain('<script id="script1">console.log()</script>');
+
+    // Check that sorting attributes are not present in final output
+    expect(result).not.toContain('data-order="1"');
+    expect(result).not.toContain('data-position="beginning"');
   });
 
-  it('should update body scripts when provided', () => {
+  it('should update body scripts when provided and remove sorting attributes', () => {
     const bodyScripts: ScriptItem[] = [
       {
         src: 'script.js',
@@ -148,8 +173,13 @@ describe('parseTemplate', () => {
     const parser = parseTemplate('<html><head></head><body></body></html>', {
       bodyScripts: bodyScripts,
     });
-    expect(parser.serialize()).toContain(
-      '<script id="script1" src="script.js" data-order="1" data-position="beginning"></script>'
-    );
+    const result = parser.serialize();
+
+    // Check that script is present but sorting attributes are removed
+    expect(result).toContain('<script id="script1" src="script.js"></script>');
+
+    // Check that sorting attributes are not present in final output
+    expect(result).not.toContain('data-order="1"');
+    expect(result).not.toContain('data-position="beginning"');
   });
 });

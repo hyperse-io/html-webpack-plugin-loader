@@ -3,7 +3,7 @@ import { parseDocument } from '../../src/utils/parseDocument.js';
 import { sortDocument } from '../../src/utils/sortDocument.js';
 
 describe('sortDocument', () => {
-  it('should sort styles in head by data-order and data-position', () => {
+  it('should sort styles in head by data-order and data-position and remove sorting attributes', () => {
     const html = `
       <html>
         <head>
@@ -70,9 +70,20 @@ describe('sortDocument', () => {
         (attr) => attr.name === 'id'
       )?.value
     ).toBe('inline3');
+
+    // Check that sorting attributes are removed
+    styleNodes.forEach((node) => {
+      const elementNode = node as DefaultTreeAdapterTypes.Element;
+      expect(
+        elementNode.attrs?.find((attr) => attr.name === 'data-order')
+      ).toBeUndefined();
+      expect(
+        elementNode.attrs?.find((attr) => attr.name === 'data-position')
+      ).toBeUndefined();
+    });
   });
 
-  it('should sort scripts in head by data-order and data-position', () => {
+  it('should sort scripts in head by data-order and data-position and remove sorting attributes', () => {
     const html = `
       <html>
         <head>
@@ -138,9 +149,20 @@ describe('sortDocument', () => {
         (attr) => attr.name === 'id'
       )?.value
     ).toBe('inline3');
+
+    // Check that sorting attributes are removed
+    scriptNodes.forEach((node) => {
+      const elementNode = node as DefaultTreeAdapterTypes.Element;
+      expect(
+        elementNode.attrs?.find((attr) => attr.name === 'data-order')
+      ).toBeUndefined();
+      expect(
+        elementNode.attrs?.find((attr) => attr.name === 'data-position')
+      ).toBeUndefined();
+    });
   });
 
-  it('should sort scripts in body by data-order and data-position', () => {
+  it('should sort scripts in body by data-order and data-position and remove sorting attributes', () => {
     const html = `
       <html>
         <head></head>
@@ -206,6 +228,17 @@ describe('sortDocument', () => {
         (attr) => attr.name === 'id'
       )?.value
     ).toBe('inline3');
+
+    // Check that sorting attributes are removed
+    scriptNodes.forEach((node) => {
+      const elementNode = node as DefaultTreeAdapterTypes.Element;
+      expect(
+        elementNode.attrs?.find((attr) => attr.name === 'data-order')
+      ).toBeUndefined();
+      expect(
+        elementNode.attrs?.find((attr) => attr.name === 'data-position')
+      ).toBeUndefined();
+    });
   });
 
   it('should not sort nodes without required attributes', () => {
@@ -215,17 +248,17 @@ describe('sortDocument', () => {
           <meta charset="utf-8">
           <link rel="stylesheet" href="style1.css">
           <link rel="stylesheet" href="style2.css" data-order="1">
-          <link rel="stylesheet" href="style3.css" data-order="1" data-position="beginning">
+          <link rel="stylesheet" href="style3.css" data-order="1" data-position="beginning" id="style3">
           <script src="script1.js"></script>
           <script src="script2.js" data-order="1"></script>
-          <script src="script3.js" data-order="1" data-position="beginning"></script>
+          <script src="script3.js" data-order="1" data-position="beginning" id="script3"></script>
           <title>Test</title>
         </head>
         <body>
           <div>Content</div>
           <script src="body1.js"></script>
           <script src="body2.js" data-order="1"></script>
-          <script src="body3.js" data-order="1" data-position="beginning"></script>
+          <script src="body3.js" data-order="1" data-position="beginning" id="body3"></script>
         </body>
       </html>
     `;
@@ -245,10 +278,7 @@ describe('sortDocument', () => {
       (node) =>
         node.nodeName === 'link' &&
         (node as DefaultTreeAdapterTypes.Element).attrs?.find(
-          (attr) => attr.name === 'data-order'
-        ) &&
-        (node as DefaultTreeAdapterTypes.Element).attrs?.find(
-          (attr) => attr.name === 'data-position'
+          (attr) => attr.name === 'id'
         )
     );
 
@@ -256,10 +286,7 @@ describe('sortDocument', () => {
       (node) =>
         node.nodeName === 'script' &&
         (node as DefaultTreeAdapterTypes.Element).attrs?.find(
-          (attr) => attr.name === 'data-order'
-        ) &&
-        (node as DefaultTreeAdapterTypes.Element).attrs?.find(
-          (attr) => attr.name === 'data-position'
+          (attr) => attr.name === 'id'
         )
     );
 
@@ -310,12 +337,6 @@ describe('sortDocument', () => {
         node.nodeName === 'link' &&
         (node as DefaultTreeAdapterTypes.Element).attrs?.find(
           (attr) => attr.name === 'rel' && attr.value === 'stylesheet'
-        ) &&
-        (node as DefaultTreeAdapterTypes.Element).attrs?.find(
-          (attr) => attr.name === 'data-order'
-        ) &&
-        (node as DefaultTreeAdapterTypes.Element).attrs?.find(
-          (attr) => attr.name === 'data-position'
         ) &&
         (node as DefaultTreeAdapterTypes.Element).attrs?.find(
           (attr) => attr.name === 'id'
@@ -384,5 +405,48 @@ describe('sortDocument', () => {
     // div, p should still be in body
     expect(bodyNodeNames).toContain('div');
     expect(bodyNodeNames).toContain('p');
+  });
+
+  it('should remove data-order and data-position attributes from all elements', () => {
+    const html = `
+      <html>
+        <head>
+          <link rel="stylesheet" href="style1.css" id="style1" data-order="1" data-position="beginning">
+          <script id="script1" src="script1.js" data-order="1" data-position="beginning"></script>
+          <style id="inline1" data-order="1" data-position="beginning">body { color: red; }</style>
+        </head>
+        <body>
+          <script id="body1" src="body1.js" data-order="1" data-position="beginning"></script>
+          <div data-order="1" data-position="beginning">Content</div>
+        </body>
+      </html>
+    `;
+
+    const { document } = parseDocument(html);
+    const result = sortDocument(document);
+
+    // Check that all data-order and data-position attributes are removed
+    const checkAttributes = (element: DefaultTreeAdapterTypes.Element) => {
+      if (element.attrs) {
+        expect(
+          element.attrs.find((attr) => attr.name === 'data-order')
+        ).toBeUndefined();
+        expect(
+          element.attrs.find((attr) => attr.name === 'data-position')
+        ).toBeUndefined();
+      }
+
+      element.childNodes.forEach((node) => {
+        if (
+          node.nodeName &&
+          node.nodeName !== '#text' &&
+          node.nodeName !== '#comment'
+        ) {
+          checkAttributes(node as DefaultTreeAdapterTypes.Element);
+        }
+      });
+    };
+
+    checkAttributes(result as any);
   });
 });
