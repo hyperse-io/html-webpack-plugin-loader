@@ -44,6 +44,7 @@ describe('htmlPluginLoader', () => {
                   id: 'style1',
                   href: 'style1.css',
                   position: 'beginning',
+                  order: 1,
                 },
               ],
               headInlineStyles: [
@@ -51,6 +52,7 @@ describe('htmlPluginLoader', () => {
                   id: 'style1',
                   content: 'p {}',
                   position: 'beginning',
+                  order: 1,
                 },
               ],
               headScripts: [
@@ -58,6 +60,7 @@ describe('htmlPluginLoader', () => {
                   id: 'script1',
                   src: 'script1.js',
                   position: 'beginning',
+                  order: 1,
                 },
               ],
               headInlineScripts: [
@@ -65,6 +68,7 @@ describe('htmlPluginLoader', () => {
                   id: 'script2',
                   content: 'console.log("script2")',
                   position: 'end',
+                  order: 1,
                 },
               ],
               bodyScripts: [
@@ -72,6 +76,7 @@ describe('htmlPluginLoader', () => {
                   id: 'script3',
                   src: 'script3.js',
                   position: 'end',
+                  order: 1,
                 },
               ],
             } satisfies TemplateOptions,
