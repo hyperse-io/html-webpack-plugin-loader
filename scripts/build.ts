@@ -2,31 +2,41 @@ import { existsSync } from 'fs';
 import { rm } from 'fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { Format, Options } from 'tsup';
-import { build } from 'tsup';
+import type { Format, InlineConfig } from 'tsdown';
+import { build } from 'tsdown';
 
 const getDirname = (url: string, subDir = '') => {
   return join(dirname(fileURLToPath(url)), subDir);
 };
 
 async function buildAll() {
-  const externals = ['webpack'];
-  const entries: Record<string, Omit<Options, 'entry'> & { entry: string }> = {
+  const deps: InlineConfig['deps'] = { neverBundle: ['webpack'] };
+  const entries: Record<
+    string,
+    Omit<InlineConfig, 'entry'> & { entry: Record<string, string> }
+  > = {
     'src/index.ts': {
-      format: ['esm', 'cjs'],
-      entry: 'index',
+      format: ['esm', 'cjs'] as Format[],
+      entry: { index: 'src/index.ts' },
       dts: true,
       clean: true,
-      external: externals,
-      outExtension: undefined,
+      deps,
+      hash: false,
+      outExtensions({ format }) {
+        return {
+          js: format === 'cjs' ? '.cjs' : '.js',
+          dts: '.d.ts',
+        };
+      },
     },
     'src/loader/htmlLoader.ts': {
-      format: ['cjs'],
-      entry: 'loader/htmlLoader',
+      format: ['cjs'] as Format[],
+      entry: { 'loader/htmlLoader': 'src/loader/htmlLoader.ts' },
       dts: false,
       clean: false,
-      external: externals,
-      outExtension() {
+      deps,
+      hash: false,
+      outExtensions() {
         return {
           js: `.cjs`,
         };
@@ -34,22 +44,14 @@ async function buildAll() {
     },
   };
 
-  for (const [key, value] of Object.entries(entries)) {
-    const { format, entry, dts, clean, outExtension, external, noExternal } =
-      value;
+  for (const [, value] of Object.entries(entries)) {
+    const { entry, ...rest } = value;
     await build({
-      splitting: false,
       treeshake: true,
       tsconfig: getDirname(import.meta.url, '../tsconfig.build.json'),
-      entry: {
-        [entry]: key,
-      },
-      dts,
-      clean,
-      outExtension,
-      external,
-      noExternal,
-      format: format as Format[],
+      outDir: getDirname(import.meta.url, '../dist'),
+      entry,
+      ...rest,
     });
   }
 }

@@ -37,8 +37,6 @@ export const upsertFavicon = (
     `<link rel="${rel}" href="${href}" ${attributesString}>`
   ).childNodes[0] as DefaultTreeAdapterTypes.Element;
 
-  // Find the position after the last meta tag
-  let insertIndex = 0;
   let lastMetaIndex = -1;
 
   // Find the last meta tag position
@@ -48,13 +46,7 @@ export const upsertFavicon = (
     }
   }
 
-  // If meta tags exist, insert after the last one
-  if (lastMetaIndex >= 0) {
-    insertIndex = lastMetaIndex + 1;
-  } else {
-    // If no meta tags exist, insert at the beginning
-    insertIndex = 0;
-  }
+  const insertIndex = lastMetaIndex >= 0 ? lastMetaIndex + 1 : 0;
 
   // Insert at the found position
   head.childNodes.splice(insertIndex, 0, linkNode);

@@ -15,9 +15,8 @@ describe('htmlPluginLoader', () => {
   });
 
   it('should return the correct html with webpack loader', async () => {
-    const loader = require.resolve(
-      '@hyperse/html-webpack-plugin-loader/loader'
-    );
+    const loader =
+      require.resolve('@hyperse/html-webpack-plugin-loader/loader');
     const result = await testWebpackPlugin(
       {
         entry: join(fixtureCwd, './index.js'),

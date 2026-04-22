@@ -428,9 +428,11 @@ describe('sortDocument', () => {
     // Check that all data-order and data-position attributes are removed
     const checkAttributes = (element: DefaultTreeAdapterTypes.Element) => {
       if (element.attrs) {
+        // eslint-disable-next-line vitest/no-conditional-expect
         expect(
           element.attrs.find((attr) => attr.name === 'data-order')
         ).toBeUndefined();
+        // eslint-disable-next-line vitest/no-conditional-expect
         expect(
           element.attrs.find((attr) => attr.name === 'data-position')
         ).toBeUndefined();
