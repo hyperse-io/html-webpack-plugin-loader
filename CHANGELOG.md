@@ -1,5 +1,11 @@
 # @hyperse/html-webpack-plugin-loader
 
+## 1.0.8
+
+### Patch Changes
+
+- [`91276d6`](https://github.com/hyperse-io/html-webpack-plugin-loader/commit/91276d61bc720fe3ddd3aa0b104cb203e20db63c) Thanks [@tianyingchun](https://github.com/tianyingchun)! - Update dependencies, improve build script, and adjust configuration files
+
 ## 1.0.7
 
 ### Patch Changes
