@@ -1,5 +1,11 @@
 # @hyperse/html-webpack-plugin-loader
 
+## 1.0.9
+
+### Patch Changes
+
+- [`8aff886`](https://github.com/hyperse-io/html-webpack-plugin-loader/commit/8aff886d898749530935378d93979a91234f6925) Thanks [@tianyingchun](https://github.com/tianyingchun)! - ci: pin GitHub Actions workflows to Node.js `lts/*` (test matrix and release job) and pass `YARN_NPM_AUTH_TOKEN` to `changesets/action` so Yarn Berry can authenticate when publishing. No runtime or API changes.
+
 ## 1.0.8
 
 ### Patch Changes
